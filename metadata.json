@@ -1,0 +1,5 @@
+{
+  "name": "Review Kit",
+  "description": "A sophisticated AI-powered dashboard for analyzing Google My Business reviews, providing deep sentiment insights, theme extraction, and actionable business recommendations.",
+  "requestFramePermissions": []
+}

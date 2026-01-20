@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Kit - GMB Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        window.tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                brand: {
+                  50: '#f0fdf9',
+                  100: '#ccfbf1',
+                  200: '#99f6e4',
+                  300: '#5eead4',
+                  400: '#2dd4bf',
+                  500: '#14b8a6',
+                  600: '#008060',
+                  700: '#00664d',
+                  800: '#004d3a',
+                  900: '#003326',
+                },
+              },
+            },
+          },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b; /* slate-800 default */
+        }
+        
+        .loading-ring {
+          display: inline-block;
+          width: 80px;
+          height: 80px;
+        }
+        .loading-ring:after {
+          content: " ";
+          display: block;
+          width: 64px;
+          height: 64px;
+          margin: 8px;
+          border-radius: 50%;
+          border: 6px solid #008060;
+          border-color: #008060 transparent #008060 transparent;
+          animation: loading-ring 1.2s linear infinite;
+        }
+        @keyframes loading-ring {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.37.0"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
