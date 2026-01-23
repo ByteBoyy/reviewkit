@@ -1,0 +1,48 @@
+# Dependencies
+node_modules
+.npm
+
+# Build output
+dist
+build
+
+# Environment files (don't include in image)
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test files
+coverage
+.nyc_output
+
+# Documentation (not needed in image)
+*.md
+!README.md
+
+# Backend directory (built separately)
+review-kit-backend
+
+# Docker files
+docker-compose*.yml
+Dockerfile*
+
+# Nginx config (mounted as volume)
+nginx/

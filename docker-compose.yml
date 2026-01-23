@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: review-kit-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro  # For SSL certs (optional)
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
+    networks:
+      - review-kit-network
+
+  # Frontend (React/Vite)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-/api}
+        - VITE_GEMINI_API_KEY=${VITE_GEMINI_API_KEY:-}
+    container_name: review-kit-frontend
+    restart: unless-stopped
+    networks:
+      - review-kit-network
+
+  # Backend (FastAPI)
+  backend:
+    build:
+      context: ./review-kit-backend
+      dockerfile: Dockerfile
+    container_name: review-kit-backend
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - APIFY_API_KEY=${APIFY_API_KEY}
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+    restart: unless-stopped
+    networks:
+      - review-kit-network
+
+networks:
+  review-kit-network:
+    driver: bridge

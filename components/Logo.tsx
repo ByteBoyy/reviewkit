@@ -2,22 +2,15 @@ import React from 'react';
 
 interface LogoProps {
   className?: string;
+  variant?: 'image' | 'full';
 }
 
-const Logo: React.FC<LogoProps> = ({ className = "w-full h-full" }) => {
-  return (
-    <svg 
-      viewBox="0 0 100 100" 
-      fill="currentColor" 
-      className={className}
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect x="42" y="10" width="16" height="80" rx="2" />
-      <rect x="10" y="42" width="80" height="16" rx="2" />
-      <rect x="42" y="10" width="16" height="80" rx="2" transform="rotate(45 50 50)" />
-      <rect x="42" y="10" width="16" height="80" rx="2" transform="rotate(-45 50 50)" />
-    </svg>
-  );
+const Logo: React.FC<LogoProps> = ({ className = "w-full h-full", variant = 'image' }) => {
+  if (variant === 'full') {
+    return <img src="/assets/logos/logo-full.png" alt="Review Kit" className={className} />;
+  }
+  
+  return <img src="/assets/logos/logo-icon.png" alt="Review Kit" className={className} />;
 };
 
 export default Logo;
