@@ -1,10 +1,24 @@
 """
 Pydantic models for request/response validation
 """
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from enum import Enum
+
+
+# Base model with camelCase serialization
+class CamelCaseModel(BaseModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,  # Accept both snake_case and camelCase input
+    )
+
+    def model_dump(self, **kwargs):
+        # Always serialize using aliases (camelCase)
+        kwargs.setdefault('by_alias', True)
+        return super().model_dump(**kwargs)
+
 
 # Enums
 class SubscriptionTier(str, Enum):
@@ -61,14 +75,11 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
-class User(UserBase):
+class User(UserBase, CamelCaseModel):
     id: str
     subscription: Optional[Subscription] = None
     usage: Optional[Usage] = None
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
+    created_at: datetime = Field(alias="createdAt")
 
 class UserResponse(User):
     locations: List['Location'] = []
@@ -93,28 +104,25 @@ class LocationUpdate(BaseModel):
     is_syncing: Optional[bool] = None
     sync_stage: Optional[SyncStage] = None
 
-class Location(LocationBase):
+class Location(LocationBase, CamelCaseModel):
     id: str
-    user_id: str
-    linked_accounts: Dict[str, Any] = {}
-    last_analysis: Optional[Dict[str, Any]] = None
-    is_syncing: bool = False
-    sync_stage: str = "idle"
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        from_attributes = True
+    user_id: str = Field(alias="userId")
+    linked_accounts: Dict[str, Any] = Field(default={}, alias="linkedAccounts")
+    last_analysis: Optional[Dict[str, Any]] = Field(default=None, alias="lastAnalysis")
+    is_syncing: bool = Field(default=False, alias="isSyncing")
+    sync_stage: str = Field(default="idle", alias="syncStage")
+    created_at: datetime = Field(alias="createdAt")
+    updated_at: datetime = Field(alias="updatedAt")
 
 class LocationWithReviews(Location):
     reviews: List['Review'] = []
 
 # Review Models
-class ReviewBase(BaseModel):
+class ReviewBase(CamelCaseModel):
     author: str
     rating: int = Field(ge=1, le=5)
     text: Optional[str] = None
-    review_date: datetime
+    review_date: datetime = Field(alias="date")
     source: ReviewSource
     url: Optional[str] = None
 
@@ -128,16 +136,13 @@ class ReviewUpdate(BaseModel):
 
 class Review(ReviewBase):
     id: str
-    location_id: str
-    external_id: Optional[str] = None
+    location_id: str = Field(alias="locationId")
+    external_id: Optional[str] = Field(default=None, alias="externalId")
     tags: List[str] = []
-    assigned_to: Optional[str] = None
-    is_archived: bool = False
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        from_attributes = True
+    assigned_to: Optional[str] = Field(default=None, alias="assignedTo")
+    is_archived: bool = Field(default=False, alias="isArchived")
+    created_at: datetime = Field(alias="createdAt")
+    updated_at: datetime = Field(alias="updatedAt")
 
 # Analysis Models
 class Theme(BaseModel):
@@ -187,3 +192,8 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     user_id: Optional[str] = None
+
+
+# Rebuild models with forward references
+LocationWithReviews.model_rebuild()
+UserResponse.model_rebuild()

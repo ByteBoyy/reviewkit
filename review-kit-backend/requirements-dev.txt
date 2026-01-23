@@ -1,0 +1,28 @@
+# --- Core API ---
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+python-dotenv==1.0.0
+python-multipart==0.0.6
+
+# --- Validation ---
+email-validator==2.1.0.post1
+
+# --- HTTP / Networking ---
+httpx==0.24.1
+requests==2.31.0
+
+# --- Auth / Security ---
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==3.2.2
+
+# --- Supabase (LOCKED) ---
+supabase==2.3.0
+gotrue==1.3.1
+postgrest==0.13.2
+storage3==0.6.1
+supafunc==0.3.3
+
+# --- AI ---
+google-generativeai==0.3.1
