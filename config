@@ -1,0 +1,6 @@
+Host github-omar
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_omar
+  IdentitiesOnly yes
+
